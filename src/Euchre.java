@@ -4,10 +4,6 @@ import java.util.Scanner;
 public class Euchre {
     private static ArrayList<Card> deck = new ArrayList<Card>();
     private static String trump;
-    private static Player p1 = new Player("P1",0);
-    private static Player p2 = new Player("P2",0);
-    private static Player p3 = new Player("P3",0);
-    private static Player p4 = new Player("P4",0);
     private static Player[] players = {
             new Player("P1",0),
             new Player("P2", 1),
@@ -53,63 +49,92 @@ public class Euchre {
             }
         }
         shuffle();
-        Card.trumpSuit(deck.get(0).getSuit());
         System.out.println(Card.print(deck.get(0)) + " is trump");
-        Card.addTrump(deck);
         for (int i = 0; i < deck.size(); i++) {
             System.out.println(Card.print(deck.get(i)));
         }
         System.out.println();
         System.out.println("P1 hand:");
-        p1.addHand(deck);
+        players[0].addHand(deck);
+        players[0].printHand();
         System.out.println();
         System.out.println("P2 hand:");
-        p2.addHand(deck);
+        players[1].addHand(deck);
+        players[1].printHand();
         System.out.println();
         System.out.println("P3 hand:");
-        p3.addHand(deck);
+        players[2].addHand(deck);
+        players[2].printHand();
         System.out.println();
         System.out.println("P4 hand:");
-        p4.addHand(deck);
+        players[3].addHand(deck);
+        players[3].printHand();
 
         //Calling trump starts
         System.out.println();
         String answer;
-        int start = -1;
-        while (start == -1) {
+        int intDealer = -1;
+        int caller = -1;
+        while (caller == -1) {
             System.out.println("Which player is the dealer?");
-            answer = myScanner.next();
-            if (answer.equalsIgnoreCase("p1")) {
-                start = 0;
+            String dealer = myScanner.next();
+            if (dealer.equalsIgnoreCase("p1")) {
+                caller = 1;
+                intDealer = 0;
                 break;
             }
-            else if (answer.equalsIgnoreCase("p2")) {
-                start = 1;
+            else if (dealer.equalsIgnoreCase("p2")) {
+                caller = 2;
+                intDealer = 1;
                 break;
             }
-            else if (answer.equalsIgnoreCase("p3")) {
-                start = 2;
+            else if (dealer.equalsIgnoreCase("p3")) {
+                caller = 3;
+                intDealer = 2;
                 break;
             }
-            else if (answer.equalsIgnoreCase("p4")) {
-                start = 3;
+            else if (dealer.equalsIgnoreCase("p4")) {
+                caller = 0;
+                intDealer = 3;
                 break;
+            }
+            else {
+                System.out.println("Not a valid option");
             }
         }
         boolean called = false;
+        int start = caller;
+        int temp = caller;
         for (int x = 0; x < players.length; x++) {
-            if (start == 4) {
-                start = 0;
+            if (caller == 4) {
+                caller = 0;
             }
-            System.out.println("Does " + players[start].getName() + " want to call?");
+            System.out.println("Does " + players[caller].getName() + " want to call?");
             answer = myScanner.next();
             if (answer.equalsIgnoreCase("yes")) {
-                players[start].addCard(deck.get(0));
+                Card.trumpSuit(deck.get(0).getSuit());
+                Card.addTrump(deck);
+                players[intDealer].addCard(deck.remove(0));
+                System.out.println(players[intDealer].getName() + " picks up " + Card.print(deck.get(0)).toLowerCase());
+                System.out.println("Which card would " + players[intDealer].getName() + " like to discard?");
+                players[intDealer].printHand();
+                int discard = myScanner.nextInt();
+                if (discard > 0 && discard < 7) {
+                    System.out.println(Card.print(players[intDealer].removeHand(discard)) + " is discarded");
+                    players[intDealer].removeHand(discard - 1);
+                }
+                else if (discard >= 7) {
+                    System.out.println("You don't have that many cards");
+                }
+                else if (discard <= 0) {
+                    System.out.println("You don't have that few cards");
+                }
                 called = true;
+
                 break;
             }
             else if (answer.equalsIgnoreCase("no")) {
-                start++;
+                caller++;
             }
             else {
                 System.out.println("Not a valid answer");
@@ -119,9 +144,36 @@ public class Euchre {
         if (called == false) {
             System.out.println(Card.print(deck.get(0)) + " is flipped down");
             for (int x = 0; x < 4; x++) {
-
+                if (temp == 4) {
+                    temp = 0;
+                }
+                System.out.println("Does " + players[temp].getName() + " want to choose trump?");
+                answer = myScanner.next();
+                x = 0;
+                if (answer.equalsIgnoreCase("yes")) {
+                    while (x != 1) {
+                        System.out.println("Which suit does " + players[temp].getName() + " want to be trump?");
+                        answer = myScanner.next();
+                        if (Card.isTrump(answer)) {
+                            System.out.println("You can't call that suit");
+                        }
+                        if (answer.equalsIgnoreCase("spades")
+                                || answer.equalsIgnoreCase("clubs")
+                                || answer.equalsIgnoreCase("diamonds")
+                                || answer.equalsIgnoreCase("hearts")) {
+                            Card.trumpSuit(answer);
+                            Card.addTrump(deck);
+                            x = 1;
+                        }
+                        else {
+                            System.out.println("Not a valid option");
+                        }
+                    }
+                }
+                temp++;
             }
         }
+
     }
     public static void shuffle() {
         for (int x = 0; x < 1500; x++) {

@@ -57,18 +57,7 @@ public class Card {
             return false;
         }
     }
-    public void setTrump(Card card) {
-        if (card.getValue() <= 10 || (!(card.getFace().equals("grjieo"))) && !(card.getFace().equals("jack"))) {
-            this.value += 6;
-        }
-        else if (card.getFace().equals("jack") && isTrump(card.getSuit())) {
-            this.value += 10;
-        }
-        else {
-            this.value += 9;
-        }
 
-    }
     public int getValue() {
         return value;
     }

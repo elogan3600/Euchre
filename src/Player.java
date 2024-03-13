@@ -9,6 +9,7 @@ public class Player {
 
     //Constructors
     public Player(String name, int turnNum) {
+        this.name = name;
         this.points = 0;
         this.turnNum = turnNum;
     }
@@ -17,14 +18,25 @@ public class Player {
     public String getName() {
         return name;
     }
+    public void setTurnNum(int turnNum) {
+        this.turnNum = turnNum;
+    }
     //Methods
     public void setDealer(Player player) {
 
     }
     public void addHand(ArrayList<Card> deck) {
         for (int x = 1; x < 6; x++) {
-            System.out.println(Card.print(deck.get(1)));
-            hand.add(deck.remove(1));
+            this.hand.add(deck.remove(1));
+        }
+    }
+    public Card removeHand(int index) {
+        Card temp = this.hand.remove(index);
+        return temp;
+    }
+    public void printHand() {
+        for (int x = 0; x < hand.size(); x++) {
+            System.out.println((x + 1) + ". " + Card.print(hand.get(x)));
         }
     }
     public void addCard(Card card) {
