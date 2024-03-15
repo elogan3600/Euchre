@@ -81,21 +81,39 @@ public class Euchre {
             if (dealer.equalsIgnoreCase("p1")) {
                 caller = 1;
                 intDealer = 0;
+                players[0].setTurnNum(3);
+                players[1].setTurnNum(0);
+                players[2].setTurnNum(1);
+                players[3].setTurnNum(2);
                 break;
             }
             else if (dealer.equalsIgnoreCase("p2")) {
                 caller = 2;
                 intDealer = 1;
+                players[0].setTurnNum(2);
+                players[1].setTurnNum(3);
+                players[2].setTurnNum(1);
+                players[3].setTurnNum(2);
                 break;
             }
             else if (dealer.equalsIgnoreCase("p3")) {
                 caller = 3;
                 intDealer = 2;
+                players[0].setTurnNum(1);
+                players[1].setTurnNum(2);
+                players[2].setTurnNum(3);
+                players[3].setTurnNum(0);
                 break;
+
+
             }
             else if (dealer.equalsIgnoreCase("p4")) {
                 caller = 0;
                 intDealer = 3;
+                players[0].setTurnNum(0);
+                players[1].setTurnNum(1);
+                players[2].setTurnNum(2);
+                players[3].setTurnNum(3);
                 break;
             }
             else {
@@ -120,8 +138,7 @@ public class Euchre {
                 players[intDealer].printHand();
                 int discard = myScanner.nextInt();
                 if (discard > 0 && discard < 7) {
-                    System.out.println(Card.print(players[intDealer].removeHand(discard)) + " is discarded");
-                    players[intDealer].removeHand(discard - 1);
+                    System.out.println(Card.print(players[intDealer].removeHand(discard - 1)) + " is discarded");
                 }
                 else if (discard >= 7) {
                     System.out.println("You don't have that many cards");
@@ -169,9 +186,46 @@ public class Euchre {
                             System.out.println("Not a valid option");
                         }
                     }
+                    System.out.println("Does " + players[temp].getName() + " want to go alone?");
+                    answer = myScanner.next();
+                    int tempLoop = 0;
+                    while (tempLoop == 0) {
+                        if (answer.equalsIgnoreCase("yes")) {
+                            if (players[temp].getTurnNum() % 2 == 0) {
+                                for (int y = 0; y < players.length; y++) {
+                                    if (players[y].getTurnNum() % 2 == 0 && players[y] != players[temp]) {
+                                        players[y].setTurnNum(-1);
+                                        tempLoop = 1;
+                                    }
+                                    else if (players[y].getTurnNum() % 2 != 0 && players[y] != players[temp]) {
+                                        players[y].setTurnNum(-1);
+                                        tempLoop = 1;
+                                    }
+                                }
+                            }
+                        }
+                        else if (!(answer.equalsIgnoreCase("no"))) {
+                            System.out.println("Not a valid option");
+                        }
+                    }
+
                 }
                 temp++;
             }
+        }
+        //Game starts
+        System.out.println();
+        System.out.println(players[start].getName() + " leads:");
+        int go = start;
+        int winner = -1;
+        int play = -1;
+        while (winner == -1) {
+            players[start].printHand();
+            System.out.println("What would " + players[start] + " like to play?");
+            play = myScanner.nextInt();
+            System.out.println(players[start].removeHand(play - 1) + " is led");
+
+
         }
 
     }

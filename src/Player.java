@@ -18,13 +18,32 @@ public class Player {
     public String getName() {
         return name;
     }
+    public int getTurnNum() {
+        return turnNum;
+    }
+    public int getNextTurnNum(Player[] players, int currentTurnNum, boolean goneAlone) {
+        if (currentTurnNum < 4 && !goneAlone) {
+            return currentTurnNum + 1;
+        }
+        else if (currentTurnNum == 4 && !goneAlone) {
+            return 0;
+        }
+        else if (currentTurnNum < 4) {
+
+            for (int x = 0; x < players.length; x++) {
+                if (players[x].getTurnNum() == currentTurnNum + 1) {
+                    return players[x].getTurnNum();
+                }
+            }
+        }
+    }
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
     public void setTurnNum(int turnNum) {
         this.turnNum = turnNum;
     }
     //Methods
-    public void setDealer(Player player) {
-
-    }
     public void addHand(ArrayList<Card> deck) {
         for (int x = 1; x < 6; x++) {
             this.hand.add(deck.remove(1));
