@@ -28,14 +28,14 @@ public class Player {
         else if (currentTurnNum == 4 && !goneAlone) {
             return 0;
         }
-        else if (currentTurnNum < 4) {
-
+        else {
             for (int x = 0; x < players.length; x++) {
                 if (players[x].getTurnNum() == currentTurnNum + 1) {
                     return players[x].getTurnNum();
                 }
             }
         }
+        return -1;
     }
     public ArrayList<Card> getHand() {
         return hand;

@@ -189,8 +189,8 @@ public class Euchre {
                     System.out.println("Does " + players[temp].getName() + " want to go alone?");
                     answer = myScanner.next();
                     int tempLoop = 0;
-                    while (tempLoop == 0) {
-                        if (answer.equalsIgnoreCase("yes")) {
+                    if (!(answer.equalsIgnoreCase("yes"))) {
+                        while (tempLoop == 0) {
                             if (players[temp].getTurnNum() % 2 == 0) {
                                 for (int y = 0; y < players.length; y++) {
                                     if (players[y].getTurnNum() % 2 == 0 && players[y] != players[temp]) {
@@ -204,10 +204,8 @@ public class Euchre {
                                 }
                             }
                         }
-                        else if (!(answer.equalsIgnoreCase("no"))) {
-                            System.out.println("Not a valid option");
-                        }
                     }
+                    else if (!(answer.equalsIgnoreCase("no")));
 
                 }
                 temp++;
