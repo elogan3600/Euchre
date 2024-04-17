@@ -147,7 +147,9 @@ public class Euchre {
                     System.out.println("You don't have that few cards");
                 }
                 called = true;
-
+                System.out.println("Does " + players[caller].getName() + " want to go alone?");
+                answer = myScanner.next();
+                goAlone(temp,answer);
                 break;
             }
             else if (answer.equalsIgnoreCase("no")) {
@@ -188,25 +190,7 @@ public class Euchre {
                     }
                     System.out.println("Does " + players[temp].getName() + " want to go alone?");
                     answer = myScanner.next();
-                    int tempLoop = 0;
-                    if (!(answer.equalsIgnoreCase("yes"))) {
-                        while (tempLoop == 0) {
-                            if (players[temp].getTurnNum() % 2 == 0) {
-                                for (int y = 0; y < players.length; y++) {
-                                    if (players[y].getTurnNum() % 2 == 0 && players[y] != players[temp]) {
-                                        players[y].setTurnNum(-1);
-                                        tempLoop = 1;
-                                    }
-                                    else if (players[y].getTurnNum() % 2 != 0 && players[y] != players[temp]) {
-                                        players[y].setTurnNum(-1);
-                                        tempLoop = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (!(answer.equalsIgnoreCase("no")));
-
+                    goAlone(temp, answer);
                 }
                 temp++;
             }
@@ -217,13 +201,44 @@ public class Euchre {
         int go = start;
         int winner = -1;
         int play = -1;
+        boolean led = false;
         while (winner == -1) {
-            players[start].printHand();
-            System.out.println("What would " + players[start] + " like to play?");
-            play = myScanner.nextInt();
-            System.out.println(players[start].removeHand(play - 1) + " is led");
+            while (play == -1 ) {
+                players[start].printHand();
+                System.out.println("What would " + players[start] + " like to play?");
+                play = myScanner.nextInt();
+                if (play < 1 || play > players[start].getHandSize()) {
+                    play = -1;
+                    System.out.println("Not a valid option");
+                }
+            }
+
+            System.out.println(Card.print(players[start].removeHand(play - 1)) + " is led");
 
 
+        }
+
+    }
+    public static void goAlone(int temp, String answer) {
+        int tempLoop = 0;
+        if (answer.equalsIgnoreCase("yes")) {
+            while (tempLoop == 0) {
+                if (players[temp].getTurnNum() % 2 == 0) {
+                    for (int y = 0; y < players.length; y++) {
+                        if (players[y].getTurnNum() % 2 == 0 && players[y] != players[temp]) {
+                            players[y].setTurnNum(-1);
+                            tempLoop = 1;
+                        }
+                        else if (players[y].getTurnNum() % 2 != 0 && players[y] != players[temp]) {
+                            players[y].setTurnNum(-1);
+                            tempLoop = 1;
+                        }
+                    }
+                }
+            }
+        }
+        else if (!(answer.equalsIgnoreCase("no"))) {
+            System.out.println("Not a valid option");
         }
 
     }
@@ -233,4 +248,5 @@ public class Euchre {
             deck.add(0, temp);
         }
     }
+
 }

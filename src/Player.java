@@ -21,6 +21,15 @@ public class Player {
     public int getTurnNum() {
         return turnNum;
     }
+    public int getHandSize() {
+        return hand.size();
+    }
+    /* Gets the number of the next turn
+       so if currentTurnNum equals 1
+       it will return 2. If
+       currentTurnNum equals 4 it will
+       return 0
+     */
     public int getNextTurnNum(Player[] players, int currentTurnNum, boolean goneAlone) {
         if (currentTurnNum < 4 && !goneAlone) {
             return currentTurnNum + 1;
